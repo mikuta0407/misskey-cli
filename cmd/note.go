@@ -27,6 +27,10 @@ to quickly create a Cobra application.`,
 			fmt.Println("too many args")
 			return
 		}
+		if len(args) == 0 {
+			fmt.Println("Please write note")
+			return
+		}
 		noteMain(args[0])
 	},
 }
