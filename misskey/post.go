@@ -3,31 +3,38 @@ package misskey
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 )
 
-func apiPost(jsonByte []byte, apiEndpoint string) error {
+func apiPost(jsonByte []byte, apiEndpoint string) ([]byte, error) {
 
-	fmt.Println(jsonByte)
-
-	fmt.Println("API")
 	req, err := http.NewRequest(
 		"POST",
 		instanceInfo.Host+"/api/"+apiEndpoint,
 		bytes.NewBuffer(jsonByte),
 	)
 	if err != nil {
-		return err
+		return jsonByte, err
 	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println(err)
-		//return err
+		return jsonByte, err
 	}
-	fmt.Println(resp)
+
+	resJsonByte, err := io.ReadAll(resp.Body)
+
+	if resp.StatusCode != 200 {
+		fmt.Println(resp.StatusCode, string(resJsonByte))
+		os.Exit(1)
+	}
+
 	defer resp.Body.Close()
 
-	return err
+	return resJsonByte, err
+
 }
