@@ -1,9 +1,6 @@
 package config
 
-
 import (
-	"fmt"
-
 	"github.com/BurntSushi/toml"
 )
 
@@ -19,7 +16,6 @@ type InstanceInfo struct {
 }
 
 func ParseToml(fileName string) (Config, error) {
-	fmt.Println(fileName)
 	var configs Config
 	_, err := toml.DecodeFile(fileName, &configs)
 
