@@ -28,6 +28,8 @@ to quickly create a Cobra application.`,
 func init() {
 	rootCmd.AddCommand(tlCmd)
 
+	rootCmd.PersistentFlags().IntVarP(&limit, "limit", "l", 10, "Limit display items(default: 10)")
+
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
@@ -39,6 +41,8 @@ func init() {
 	// tlCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
+var limit int
+
 func tlMain() {
 	configs, err := config.ParseToml(cfgFile)
 	if err != nil {
@@ -46,6 +50,6 @@ func tlMain() {
 		return
 	}
 
-	misskey.GetTl(configs, instanceName)
+	misskey.GetTl(configs, instanceName, limit)
 
 }
