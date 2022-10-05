@@ -46,7 +46,6 @@ func tlMain() {
 		return
 	}
 
-	fmt.Println(configs)
 	misskey.GetTl(configs, instanceName)
 
 }
