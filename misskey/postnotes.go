@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/buger/jsonparser"
 	"github.com/mikuta0407/misskey-cli/config"
 )
 
@@ -34,20 +35,11 @@ func PostNote(configs config.Config, instanceName string, text string) {
 		return
 	}
 
-	fmt.Println(string(resJsonByte))
+	id, _ := jsonparser.GetString(resJsonByte, "createdNote", "id")
+	text, _ = jsonparser.GetString(resJsonByte, "createdNote", "text")
 
-	// jsonparser.ArrayEach(resJsonByte, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
-	// 	name, _, _, _ := jsonparser.Get(value, "user", "name")
+	str := fmt.Sprintf("Note Success! id : %s\n\"%s\"", string(id), string(text))
 
-	// 	username, _, _, _ := jsonparser.Get(value, "user", "username")
-
-	// 	text, _, _, _ := jsonparser.Get(value, "text")
-
-	// 	id, _, _, _ := jsonparser.Get(value, "id")
-
-	// 	str := fmt.Sprintf("\x1b[31m%s (@%s)\x1b[0m\t %s \t\x1b[34m(%s)\x1b[0m", string(name), string(username), string(text), string(id))
-
-	// 	fmt.Println(str)
-	// })
+	fmt.Println(str)
 
 }
