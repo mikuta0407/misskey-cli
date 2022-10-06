@@ -50,34 +50,91 @@ func GetTl(configs config.Config, instanceName string, limit int, mode string) {
 	}
 
 	jsonparser.ArrayEach(resJsonByte, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
-		name, _, _, _ := jsonparser.Get(value, "user", "name")
-		nameStr := string(name)
 
-		username, _, _, _ := jsonparser.Get(value, "user", "username")
-		usernameStr := string(username)
-
-		host, _, _, _ := jsonparser.Get(value, "user", "host")
-		if string(host) != "null" {
-			usernameStr = usernameStr + "@" + string(host)
-		}
+		var (
+			nameStr     string
+			usernameStr string
+			textStr     string
+			attach      string
+			idStr       string
+		)
 
 		text, _, _, _ := jsonparser.Get(value, "text")
-		textStr := string(text)
 
-		id, _, _, _ := jsonparser.Get(value, "id")
-		idStr := string(id)
+		if string(text) != "null" {
+			// renoteじゃなかったら
+			// 投稿者
+			name, _, _, _ := jsonparser.Get(value, "user", "name")
+			nameStr = string(name)
 
-		isCatByte, _, _, _ := jsonparser.Get(value, "user", "isCat")
-		isCat := string(isCatByte)
+			//投稿者ID
+			username, _, _, _ := jsonparser.Get(value, "user", "username")
+			usernameStr = string(username)
 
-		if isCat == "true" {
-			nameStr = nameStr + "(Cat)"
-		}
+			//ホスト名
+			host, _, _, _ := jsonparser.Get(value, "user", "host")
+			if string(host) != "null" {
+				usernameStr = usernameStr + "@" + string(host)
+			}
 
-		filesId, _, _, _ := jsonparser.Get(value, "files")
-		var attach string
-		if len(filesId) != 2 {
-			attach = "   (添付有り)"
+			// 本文
+			text, _, _, _ := jsonparser.Get(value, "text")
+			textStr = string(text)
+
+			//投稿ID(元投稿)
+			id, _, _, _ := jsonparser.Get(value, "id")
+			idStr = string(id)
+
+			//ねこかどうか
+			isCatByte, _, _, _ := jsonparser.Get(value, "user", "isCat")
+			isCat := string(isCatByte)
+
+			if isCat == "true" {
+				nameStr = nameStr + "(Cat)"
+			}
+
+			// ファイルが有れば
+			filesId, _, _, _ := jsonparser.Get(value, "files")
+			if len(filesId) != 2 {
+				attach = "   (添付有り)"
+			}
+		} else {
+			// renoteだったら
+			// 投稿者
+			name, _, _, _ := jsonparser.Get(value, "renote", "user", "name")
+			nameStr = "[RN]" + string(name)
+
+			//投稿者ID
+			username, _, _, _ := jsonparser.Get(value, "renote", "user", "username")
+			usernameStr = string(username)
+
+			//ホスト名
+			host, _, _, _ := jsonparser.Get(value, "renote", "user", "host")
+			if string(host) != "null" {
+				usernameStr = usernameStr + "@" + string(host)
+			}
+
+			// 本文
+			text, _, _, _ := jsonparser.Get(value, "renote", "text")
+			textStr = string(text)
+
+			//投稿ID(元投稿)
+			id, _, _, _ := jsonparser.Get(value, "renote", "id")
+			idStr = string(id)
+
+			//ねこかどうか
+			isCatByte, _, _, _ := jsonparser.Get(value, "renote", "user", "isCat")
+			isCat := string(isCatByte)
+
+			if isCat == "true" {
+				nameStr = nameStr + "(Cat)"
+			}
+
+			// ファイルが有れば
+			filesId, _, _, _ := jsonparser.Get(value, "renote", "files")
+			if len(filesId) != 2 {
+				attach = "   (添付有り)"
+			}
 		}
 
 		str := fmt.Sprintf("\x1b[31m%s (@%s)\x1b[0m\t %s \t\x1b[32m%s\x1b[0m\x1b[34m(%s)\x1b[0m", nameStr, usernameStr, textStr, attach, idStr)
