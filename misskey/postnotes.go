@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/buger/jsonparser"
-	"github.com/mikuta0407/misskey-cli/config"
 )
 
 // POST用
@@ -13,75 +12,64 @@ type CreateNoteBody struct {
 	I    string `json:"i"`
 	Text string `json:"text"`
 }
-type ReplyNoteBody struct {
-	I       string `json:"i"`
-	Text    string `json:"text"`
-	ReplyId string `json:"replyId"`
-}
 
-type RenoteNoteBody struct {
-	I        string `json:"i"`
-	RenoteId string `json:"renoteId"`
-}
-
-type DeleteNoteBody struct {
+type NoteBody struct {
 	I      string `json:"i"`
 	NoteId string `json:"noteId"`
 }
 
-func CreateNote(configs config.Config, instanceName string, text string) {
-	var err error
-	instanceInfo, err = getInstanceInfo(configs, instanceName)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	body := CreateNoteBody{
-		I:    instanceInfo.Token,
+func (c *Client) CreateNote(text string) error {
+	body := struct {
+		I    string `json:"i"`
+		Text string `json:"text"`
+	}{
+		I:    c.InstanceInfo.Token,
 		Text: text,
 	}
 
 	jsonByte, err := json.Marshal(body)
-
-	resJsonByte, err := apiPost(jsonByte, "notes/create")
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
-	id, _ := jsonparser.GetString(resJsonByte, "createdNote", "id")
-	text, _ = jsonparser.GetString(resJsonByte, "createdNote", "text")
+	if err := c.apiPost(jsonByte, "notes/create"); err != nil {
+		return err
+	}
+
+	id, _ := jsonparser.GetString(c.resBuf.Bytes(), "createdNote", "id")
+	text, _ = jsonparser.GetString(c.resBuf.Bytes(), "createdNote", "text")
 
 	str := fmt.Sprintf("Note Success! id : %s\n\"%s\"", string(id), string(text))
 
 	fmt.Println(str)
 
+	return nil
+
 }
 
-func ReplyNote(configs config.Config, instanceName string, replyId string, text string) {
-	var err error
-	instanceInfo, err = getInstanceInfo(configs, instanceName)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	body := ReplyNoteBody{
-		I:       instanceInfo.Token,
-		Text:    text,
+func (c *Client) ReplyNote(replyId string, text string) error {
+	body := struct {
+		I       string `json:"i"`
+		ReplyId string `json:"replyId"`
+		Text    string `json:"text"`
+	}{
+		I:       c.InstanceInfo.Token,
 		ReplyId: replyId,
+		Text:    text,
 	}
 
 	jsonByte, err := json.Marshal(body)
-
-	resJsonByte, err := apiPost(jsonByte, "notes/create")
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
-	fmt.Println(string(resJsonByte))
+	if err := c.apiPost(jsonByte, "notes/create"); err != nil {
+		return err
+	}
+
+	fmt.Println(c.resBuf)
+
+	return nil
 	// id, _ := jsonparser.GetString(resJsonByte, "createdNote", "id")
 	// text, _ = jsonparser.GetString(resJsonByte, "createdNote", "text")
 
@@ -91,28 +79,26 @@ func ReplyNote(configs config.Config, instanceName string, replyId string, text 
 
 }
 
-func RenoteNote(configs config.Config, instanceName string, renoteId string) {
-	var err error
-	instanceInfo, err = getInstanceInfo(configs, instanceName)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	body := RenoteNoteBody{
-		I:        instanceInfo.Token,
+func (c *Client) RenoteNote(renoteId string) error {
+	body := struct {
+		I        string `json:"i"`
+		RenoteId string `json:"replyId"`
+	}{
+		I:        c.InstanceInfo.Token,
 		RenoteId: renoteId,
 	}
 
 	jsonByte, err := json.Marshal(body)
-
-	resJsonByte, err := apiPost(jsonByte, "notes/create")
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
-	fmt.Println(string(resJsonByte))
+	if err := c.apiPost(jsonByte, "notes/create"); err != nil {
+		return err
+	}
+
+	fmt.Println(c.resBuf)
+	return nil
 
 	// id, _ := jsonparser.GetString(resJsonByte, "createdNote", "id")
 	// text, _ = jsonparser.GetString(resJsonByte, "createdNote", "text")
@@ -123,30 +109,28 @@ func RenoteNote(configs config.Config, instanceName string, renoteId string) {
 
 }
 
-func DeleteNote(configs config.Config, instanceName string, noteId string) {
-	var err error
-	instanceInfo, err = getInstanceInfo(configs, instanceName)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+func (c *Client) DeleteNote(noteId string) error {
 
-	body := DeleteNoteBody{
-		I:      instanceInfo.Token,
+	body := struct {
+		I      string `json:"i"`
+		NoteId string `json:"noteId"`
+	}{
+		I:      c.InstanceInfo.Token,
 		NoteId: noteId,
 	}
 
 	jsonByte, err := json.Marshal(body)
-
-	resJsonByte, err := apiPost(jsonByte, "notes/delete")
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
+	}
+
+	if err := c.apiPost(jsonByte, "notes/delete"); err != nil {
+		return err
 	}
 
 	fmt.Println("Deleted!")
 
-	fmt.Println(string(resJsonByte))
+	return nil
 
 	// id, _ := jsonparser.GetString(resJsonByte, "createdNote", "id")
 	// text, _ = jsonparser.GetString(resJsonByte, "createdNote", "text")

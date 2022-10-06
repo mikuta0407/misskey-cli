@@ -8,33 +8,29 @@ import (
 	"os"
 )
 
-func apiPost(jsonByte []byte, apiEndpoint string) ([]byte, error) {
+func (c *Client) apiPost(jsonByte []byte, endpoint string) error {
 
 	req, err := http.NewRequest(
 		"POST",
-		instanceInfo.Host+"/api/"+apiEndpoint,
+		c.InstanceInfo.Host+"/api/"+endpoint,
 		bytes.NewBuffer(jsonByte),
 	)
 	if err != nil {
-		return jsonByte, err
+		return err
 	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println(err)
-		return jsonByte, err
-	}
 
-	resJsonByte, err := io.ReadAll(resp.Body)
+	c.resBuf = new(bytes.Buffer)
+	if _, err = io.Copy(c.resBuf, resp.Body); err != nil {
+		return err
+	}
 
 	if resp.StatusCode < 200 || resp.StatusCode > 300 {
-		fmt.Println(resp.StatusCode, string(resJsonByte))
+		fmt.Println(resp.StatusCode, c.resBuf)
 		os.Exit(1)
 	}
-
 	defer resp.Body.Close()
-
-	return resJsonByte, err
-
+	return nil
 }
