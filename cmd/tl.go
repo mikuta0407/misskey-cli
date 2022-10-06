@@ -29,19 +29,13 @@ func init() {
 	rootCmd.AddCommand(tlCmd)
 
 	rootCmd.PersistentFlags().IntVarP(&limit, "limit", "l", 10, "Limit display items(default: 10)")
+	rootCmd.PersistentFlags().StringVarP(&mode, "mode", "m", "local", "TimeLine mode(local(default)/home/global)")
+	//rootCmd.PersistentFlags().BoolVar(&local, "local", false, "local only (default: false")
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// tlCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// tlCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 var limit int
+var mode string
 
 func tlMain() {
 	configs, err := config.ParseToml(cfgFile)
@@ -50,6 +44,6 @@ func tlMain() {
 		return
 	}
 
-	misskey.GetTl(configs, instanceName, limit)
+	misskey.GetTl(configs, instanceName, limit, mode)
 
 }
