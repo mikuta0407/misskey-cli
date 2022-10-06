@@ -40,6 +40,8 @@ tomlファイルに
   - 一度に表示する数の制御ができる
     `go run main.go tl -i hoge -l 20`
   - 添付があるかないかわかる
+  - Renoteかどうか分かる
+  - リプライ元の投稿がわかる
 - 投稿関連
   - 投稿できる
     `go run main.go note -i hoge "ねこですよろしくおねがいします"`
