@@ -28,9 +28,8 @@ to quickly create a Cobra application.`,
 func init() {
 	rootCmd.AddCommand(tlCmd)
 
-	rootCmd.PersistentFlags().IntVarP(&limit, "limit", "l", 10, "Limit display items(default: 10)")
-	rootCmd.PersistentFlags().StringVarP(&mode, "mode", "m", "local", "TimeLine mode(local(default)/home/global)")
-	//rootCmd.PersistentFlags().BoolVar(&local, "local", false, "local only (default: false")
+	tlCmd.Flags().IntVarP(&limit, "limit", "l", 10, "Limit display items(default: 10)")
+	tlCmd.Flags().StringVarP(&mode, "mode", "m", "local", "TimeLine mode(local(default)/home/global)")
 
 }
 

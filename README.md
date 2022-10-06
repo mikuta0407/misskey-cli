@@ -15,15 +15,15 @@ tomlファイルに
 
 と書いて準備した後、
 
-`go run main.go tl -c config.toml -i インスタンス名`
+`go run main.go tl (--config config.toml) -i インスタンス名`
 
-でTLが引っ張れます。
+でローカルTLが引っ張れます。
 
-` go run main.go note -c config.toml -i インスタンス名 "こんにちは"`
+` go run main.go note (--config config.toml) -i インスタンス名 "こんにちは"`
 
 で「こんにちは」が投稿されます。
 
--cオプションは、将来的には指定無しの場合は~/.config/misskey-cli.tomlを読むようにしたいなと思っています。
+--configオプションを指定しない場合は~/.config/misskey-cli.tomlを読むようになっています。
 
 ## できること
 - インスタンス関連
@@ -44,6 +44,12 @@ tomlファイルに
   - 投稿できる
     `go run main.go note -i hoge "ねこですよろしくおねがいします"`
     ‐ 投稿するとちゃんとIDが表示される)
+  - リプライができる
+    `go run main.go note -r 90ab12cd34 "ねこでした"`
+  - 投稿の削除ができる
+    `go run main.go note -d 90ab12cd34`
+  - renoteできる
+    `go run main.go renote 90ab12cd34`
 
 ## できないこと
 - `misskey-cli tl ...`みたいにつかう(未ビルドのため)

@@ -22,39 +22,62 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+
 		fmt.Println("note called")
-		if len(args) > 1 {
-			fmt.Println("too many args")
+
+		configs, err := config.ParseToml(cfgFile)
+		if err != nil {
+			fmt.Println(err)
 			return
 		}
-		if len(args) == 0 {
-			fmt.Println("Please write note")
+
+		if deleteId == "" && replyId == "" {
+			if len(args) > 1 {
+				fmt.Println("too many args")
+				return
+			}
+			if len(args) == 0 {
+				fmt.Println("Please write note")
+				return
+			}
+			misskey.CreateNote(configs, instanceName, args[0])
+		} else if deleteId != "" && replyId == "" {
+			misskey.DeleteNote(configs, instanceName, deleteId)
+		} else if deleteId == "" && replyId != "" {
+			if len(args) > 1 {
+				fmt.Println("too many args")
+				return
+			}
+			if len(args) == 0 {
+				fmt.Println("Please write note")
+				return
+			}
+			misskey.ReplyNote(configs, instanceName, replyId, args[0])
+		} else {
+			fmt.Println("Please one Option")
 			return
 		}
-		noteMain(args[0])
+
 	},
 }
+
+var (
+	delete   string
+	children string
+	replyId  string
+	deleteId string
+)
 
 func init() {
 	rootCmd.AddCommand(noteCmd)
 
-	// Here you will define your flags and configuration settings.
+	// 削除
+	noteCmd.Flags().StringVarP(&deleteId, "delete", "d", "", "Delete notes (id)")
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// noteCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// リプライ
+	noteCmd.Flags().StringVarP(&replyId, "reply", "r", "", "reply note")
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// noteCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
+	// 公開範囲の話
+	//noteCmd.Flags().StringVarP(&reply, "", "", "", "")
 
-func noteMain(text string) {
-	configs, err := config.ParseToml(cfgFile)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	misskey.PostNote(configs, instanceName, text)
 }

@@ -28,7 +28,7 @@ func apiPost(jsonByte []byte, apiEndpoint string) ([]byte, error) {
 
 	resJsonByte, err := io.ReadAll(resp.Body)
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode < 200 || resp.StatusCode > 300 {
 		fmt.Println(resp.StatusCode, string(resJsonByte))
 		os.Exit(1)
 	}

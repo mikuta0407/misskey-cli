@@ -28,7 +28,7 @@ func Execute() {
 
 func init() {
 
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.misskey-cli.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.misskey-cli.yaml)")
 	rootCmd.PersistentFlags().StringVarP(&instanceName, "instance", "i", "", "connect instance name(not host name)")
 
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

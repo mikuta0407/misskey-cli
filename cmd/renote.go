@@ -1,12 +1,13 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
 
+	"github.com/mikuta0407/misskey-cli/config"
+	"github.com/mikuta0407/misskey-cli/misskey"
 	"github.com/spf13/cobra"
 )
 
@@ -22,6 +23,20 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("renote called")
+		configs, err := config.ParseToml(cfgFile)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		if len(args) > 1 {
+			fmt.Println("too many args")
+			return
+		}
+		if len(args) == 0 {
+			fmt.Println("Please write note")
+			return
+		}
+		misskey.RenoteNote(configs, instanceName, args[0])
 	},
 }
 
