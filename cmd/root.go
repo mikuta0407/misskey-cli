@@ -16,7 +16,7 @@ var instanceName string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "misskey-cli",
-	Short: "",
+	Short: "Misskey CLI Client",
 	Long:  ``,
 }
 

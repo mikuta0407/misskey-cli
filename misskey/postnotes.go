@@ -7,17 +7,6 @@ import (
 	"github.com/buger/jsonparser"
 )
 
-// POST用
-type CreateNoteBody struct {
-	I    string `json:"i"`
-	Text string `json:"text"`
-}
-
-type NoteBody struct {
-	I      string `json:"i"`
-	NoteId string `json:"noteId"`
-}
-
 func (c *Client) CreateNote(text string) error {
 	body := struct {
 		I    string `json:"i"`
@@ -38,6 +27,9 @@ func (c *Client) CreateNote(text string) error {
 
 	id, _ := jsonparser.GetString(c.resBuf.Bytes(), "createdNote", "id")
 	text, _ = jsonparser.GetString(c.resBuf.Bytes(), "createdNote", "text")
+
+	fmt.Println("Create Note: @" + c.InstanceInfo.UserName + " (" + c.InstanceInfo.Host + ")")
+	printLine()
 
 	str := fmt.Sprintf("Note Success! id : %s\n\"%s\"", string(id), string(text))
 
@@ -67,22 +59,21 @@ func (c *Client) ReplyNote(replyId string, text string) error {
 		return err
 	}
 
-	fmt.Println(c.resBuf)
+	fmt.Println("Reply Note: @" + c.InstanceInfo.UserName + " (" + c.InstanceInfo.Host + ")")
+	printLine()
+
+	str := fmt.Sprintf("Replay Success! id : %s\n", replyId)
+
+	fmt.Println(str)
 
 	return nil
-	// id, _ := jsonparser.GetString(resJsonByte, "createdNote", "id")
-	// text, _ = jsonparser.GetString(resJsonByte, "createdNote", "text")
-
-	// str := fmt.Sprintf("Note Success! id : %s\n\"%s\"", string(id), string(text))
-
-	// fmt.Println(str)
 
 }
 
 func (c *Client) RenoteNote(renoteId string) error {
 	body := struct {
 		I        string `json:"i"`
-		RenoteId string `json:"replyId"`
+		RenoteId string `json:"renoteId"`
 	}{
 		I:        c.InstanceInfo.Token,
 		RenoteId: renoteId,
@@ -97,20 +88,21 @@ func (c *Client) RenoteNote(renoteId string) error {
 		return err
 	}
 
-	fmt.Println(c.resBuf)
+	fmt.Println("Renote Note: @" + c.InstanceInfo.UserName + " (" + c.InstanceInfo.Host + ")")
+	printLine()
+
+	str := fmt.Sprintln("Renote Success! id:" + renoteId)
+
+	fmt.Println(str)
+
 	return nil
-
-	// id, _ := jsonparser.GetString(resJsonByte, "createdNote", "id")
-	// text, _ = jsonparser.GetString(resJsonByte, "createdNote", "text")
-
-	// str := fmt.Sprintf("Note Success! id : %s\n\"%s\"", string(id), string(text))
-
-	// fmt.Println(str)
 
 }
 
 func (c *Client) DeleteNote(noteId string) error {
 
+	fmt.Printf("\n")
+	printLine()
 	body := struct {
 		I      string `json:"i"`
 		NoteId string `json:"noteId"`

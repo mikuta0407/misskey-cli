@@ -12,11 +12,11 @@ import (
 
 // renoteCmd represents the renote command
 var renoteCmd = &cobra.Command{
-	Use:   "renote",
-	Short: "",
-	Long:  ``,
+	Use:     "renote",
+	Short:   "Renote note by noteId",
+	Long:    `Renote note by noteId`,
+	Example: `renote -i hoge 90ab12cd ねこはいます`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("renote called")
 
 		client := misskey.NewClient(instanceName, cfgFile)
 

@@ -11,8 +11,8 @@ import (
 // tlCmd represents the tl command
 var tlCmd = &cobra.Command{
 	Use:   "tl",
-	Short: "",
-	Long:  ``,
+	Short: "Show timelime (local/home/global)",
+	Long:  `Show timelime command`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client := misskey.NewClient(instanceName, cfgFile)
 		if err := client.GetTimeline(limit, mode); err != nil {
@@ -27,7 +27,7 @@ var mode string
 func init() {
 	rootCmd.AddCommand(tlCmd)
 
-	tlCmd.Flags().IntVarP(&limit, "limit", "l", 10, "Limit display items(default: 10)")
-	tlCmd.Flags().StringVarP(&mode, "mode", "m", "local", "TimeLine mode(local(default)/home/global)")
+	tlCmd.Flags().IntVarP(&limit, "limit", "l", 10, "Limit display items")
+	tlCmd.Flags().StringVarP(&mode, "mode", "m", "local", "TimeLine mode(local/home/global)")
 
 }
