@@ -3,6 +3,7 @@ package misskey
 import (
 	"bytes"
 	"fmt"
+	"os"
 
 	"github.com/mikuta0407/misskey-cli/config"
 )
@@ -16,7 +17,7 @@ func NewClient(instanceName string, cfgFile string) *Client {
 	configs, err := config.ParseToml(cfgFile)
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		os.Exit(1)
 	}
 
 	var instanceInfo config.InstanceInfo

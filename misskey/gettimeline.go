@@ -4,18 +4,21 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/buger/jsonparser"
 )
 
 type noteData struct {
-	name     string
-	username string
-	host     string
-	text     string
-	attach   string
-	id       string
-	isCat    bool
+	offset    string
+	timestamp string
+	name      string
+	username  string
+	host      string
+	text      string
+	attach    string
+	id        string
+	isCat     bool
 }
 
 // タイムライン取得
@@ -70,9 +73,9 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 					fmt.Println(err)
 					return
 				}
-				repStr := fmt.Sprintf("\x1b[35m%s(@%s)\x1b[0m\t %s \x1b[32m%s\x1b[0m\x1b[34m(%s)\x1b[0m", replyParent.name, replyParent.username, replyParent.text, replyParent.attach, replyParent.id)
+				repStr := fmt.Sprintf("%s\x1b[35m%s(@%s)\x1b[0m\t %s \x1b[32m%s\x1b[0m\x1b[34m(%s)\x1b[0m", replyParent.timestamp, replyParent.name, replyParent.username, replyParent.text, replyParent.attach, replyParent.id)
 				fmt.Println(repStr)
-				note.name = "   " + note.name
+				note.offset = "    "
 			}
 
 		} else { // renoteだったら
@@ -89,7 +92,7 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 
 		}
 
-		str := fmt.Sprintf("\x1b[31m%s(@%s)\x1b[0m\t %s \x1b[32m%s\x1b[0m\x1b[34m(%s)\x1b[0m", note.name, note.username, note.text, note.attach, note.id)
+		str := fmt.Sprintf("%s%s \x1b[31m%s(@%s)\x1b[0m\t %s \x1b[32m%s\x1b[0m\x1b[34m(%s)\x1b[0m", note.offset, note.timestamp, note.name, note.username, note.text, note.attach, note.id)
 
 		fmt.Println(str)
 	})
@@ -118,6 +121,14 @@ func pickNote(value []byte) (noteData, error) {
 	if err == nil {
 		note.username = note.username + "@" + note.host
 	}
+
+	// 投稿時刻
+	note.timestamp, err = jsonparser.GetString(value, "createdAt")
+	if err != nil {
+		return note, err
+	}
+	t, _ := time.ParseInLocation("2006-01-02T15:04:05Z", note.timestamp, time.UTC)
+	note.timestamp = t.In(time.Local).Format("2006/01/02 15:04:05")
 
 	// 本文
 	note.text, _ = jsonparser.GetString(value, "text")
