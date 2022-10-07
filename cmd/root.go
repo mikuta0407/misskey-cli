@@ -3,6 +3,7 @@ package cmd
 import (
 	//"fmt"
 
+	"fmt"
 	"os"
 
 	"github.com/mikuta0407/misskey-cli/config"
@@ -20,6 +21,7 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
+	fmt.Printf("misskey-cli  ")
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)

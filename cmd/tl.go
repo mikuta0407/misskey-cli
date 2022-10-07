@@ -14,7 +14,6 @@ var tlCmd = &cobra.Command{
 	Short: "",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("tl called")
 		client := misskey.NewClient(instanceName, cfgFile)
 		if err := client.GetTimeline(limit, mode); err != nil {
 			fmt.Println(err)

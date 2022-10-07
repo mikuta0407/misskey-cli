@@ -51,6 +51,9 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 		return err
 	}
 
+	fmt.Println("Timeline: " + mode + "  @" + c.InstanceInfo.UserName + " (" + c.InstanceInfo.Host + ")")
+	printLine()
+
 	jsonparser.ArrayEach(c.resBuf.Bytes(), func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
 
 		// とりあえずTextを持ってきてみる
@@ -73,7 +76,7 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 					fmt.Println(err)
 					return
 				}
-				repStr := fmt.Sprintf("%s\x1b[35m%s(@%s)\x1b[0m\t %s \x1b[32m%s\x1b[0m\x1b[34m(%s)\x1b[0m", replyParent.timestamp, replyParent.name, replyParent.username, replyParent.text, replyParent.attach, replyParent.id)
+				repStr := fmt.Sprintf("%s \x1b[35m%s(@%s)\x1b[0m\t %s \x1b[32m%s\x1b[0m\x1b[34m(%s)\x1b[0m", replyParent.timestamp, replyParent.name, replyParent.username, replyParent.text, replyParent.attach, replyParent.id)
 				fmt.Println(repStr)
 				note.offset = "    "
 			}
