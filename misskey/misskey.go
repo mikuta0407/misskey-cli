@@ -31,7 +31,7 @@ func NewClient(instanceName string, cfgFile string) *Client {
 			instanceInfo = configs.Instance[index]
 		} else {
 			fmt.Println("No instance name in config")
-			return nil
+			os.Exit(1)
 		}
 	} else {
 		instanceInfo = configs.Instance[0]

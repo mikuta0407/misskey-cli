@@ -101,7 +101,7 @@ func (c *Client) RenoteNote(renoteId string) error {
 
 func (c *Client) DeleteNote(noteId string) error {
 
-	fmt.Printf("\n")
+	fmt.Println("Delete Note: @" + c.InstanceInfo.UserName + " (" + c.InstanceInfo.Host + ")")
 	printLine()
 	body := struct {
 		I      string `json:"i"`
@@ -123,12 +123,5 @@ func (c *Client) DeleteNote(noteId string) error {
 	fmt.Println("Deleted!")
 
 	return nil
-
-	// id, _ := jsonparser.GetString(resJsonByte, "createdNote", "id")
-	// text, _ = jsonparser.GetString(resJsonByte, "createdNote", "text")
-
-	// str := fmt.Sprintf("Note Success! id : %s\n\"%s\"", string(id), string(text))
-
-	// fmt.Println(str)
 
 }
