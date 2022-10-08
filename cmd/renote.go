@@ -1,6 +1,6 @@
-// /*
-// Copyright © 2022 mikuta0407
-// */
+/*
+Copyright © 2022 mikuta0407
+*/
 package cmd
 
 import (
