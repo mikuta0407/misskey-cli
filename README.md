@@ -6,6 +6,7 @@ MisskeyのCLIクライアントです。
 
 ![misskey-cli](https://user-images.githubusercontent.com/13357430/194720200-8dbf0394-9d4b-4e84-ad91-739eb0fec1c4.png)
 
+[twty](https://github.com/mattn/twty)が便利だったのでMisskeyでも似たようなことをしたくて作りました。
 
 ## とりあえずの使い方
 
