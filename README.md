@@ -1,66 +1,75 @@
 # misskey-cli
 
-まだ制作中ですが、
+MisskeyのCLIクライアントです。
 
-現在のコミットでは、
+まだ制作中ですが、とりあえず使えるようになりました。
 
-tomlファイルに
-```
-[[Instance]]
-  host = "https://example.com"
-  name = "インスタンス名(自由)"
-  token = "API Token"
+## とりあえずの使い方
 
-```
+### 事前準備
 
-と書いて準備した後、
+1. `~/.config/misskey-cli.toml` を作成します。
+2. misskeyのサイトで、設定→その他設定→API→アクセストークンの作成 で、APIのアクセストークンを作成します(コピーして下さい)
+3. 以下の内容にします。(token欄に2番で作成したAPIアクセストークンを入力します)
+  ```
+  [[Instance]]
+    host = "https://example.com"
+    name = "インスタンス名(自由)"
+    token = "API Token"
+  ```
 
-`./misskey-cli tl (--config config.toml) -i インスタンス名`
+  複数インスタンス書く場合はこれを羅列します。(tomlのテーブルです)
 
-でローカルTLが引っ張れます。
+### コマンド
 
-` ./misskey-cli note (--config config.toml) -i インスタンス名 "こんにちは"`
+- タイムラインを見る: `tl`
+  - `./misskey-cli tl -i インスタンス名` (インスタンス名はtomlの「name」項目の値)
+    - `-m local`でローカルTL(デフォルト)
+    - `-m global`でグローバルTL
+    - `-m home`でホームTL
+    - `-l 20`で20件表示(デフォルト10件)
+- 新規投稿/リプライ/投稿の削除: `note`
+  - `./misskey-cli note -i hogeinstance ねこです`: hogeinstanceインスタンスに「ねこです」と投稿
+  - `./misskey-cli note -i hogeinstance -r 9012abcdef "よろしくおねがいします。 ねこでした`: ノートIDが9012abcdefの投稿に返信
+  - `./misskey-cli note -i hogeinstance -d 9012abcdef`: ノートIDが9012abcdefの投稿を削除
+- リノート: `renote`
+  - `./misskey-cli renote -i hogeinstance 9012abcdef`: ノートIDが9012abcdefの投稿をリノート
 
-で「こんにちは」が投稿されます。
+### その他挙動について
 
---configオプションを指定しない場合は~/.config/misskey-cli.tomlを読むようになっています。
+- `-i`でインスタンスを指定しなかった場合は、toml内の一番上のインスタンスを自動的に利用します
+- `--config`でtomlファイルを指定できます。指定がない場合に`~/.config/misskey-cli.toml`を読むようになっています。
+- 未知の挙動があるかもしれません。サーバーを破壊することは無いと思いますが、責任は負いません。
 
-## できること
+## できること・できないことまとめ
+
+### できること
 
 - インスタンス設定関連
   - 接続情報を保存して利用する(tomlで保存)
   - インスタンスを切り替えて操作する
-    `-i`でtoml内の`name`で指定した名前を指定します
+    - `-i`でtoml内の`name`で指定した名前を指定します
 - タイムライン
   - homeタイムラインを見る
-    `./misskey-cli tl -i hoge -m home`
   - localタイムラインを見る
-    `./misskey-cli tl -i hoge -m local`
   - globalタイムラインを見る
-    `./misskey-cli tl -i hoge -m global`
   - 投稿主がローカルか他サーバかがわかる
   - 一度に表示する数の制御ができる
-    `./misskey-cli tl -i hoge -l 20`
   - 添付があるかないかわかる
   - 投稿がRenoteかどうか分かる
   - リプライ元の投稿がわかる
   - 投稿時間がわかる
 - 投稿関連
   - 投稿する
-    `./misskey-cli note -i hoge "ねこですよろしくおねがいします"`
-    ‐ 投稿するとちゃんとIDが表示される)
+    - publicのみ
   - リプライする
-    `./misskey-cli note -r 90ab12cd34 "ねこでした"`
   - 投稿の削除をする
-    `./misskey-cli note -d 90ab12cd34`
   - renoteする
-    `./misskey-cli renote 90ab12cd34`
-
+ 
 ## まだできないこと
 
 - インスタンス設定関連
   - コマンドから新たにアカウントを追加する (優先度: 最高)
-  - ファイルがない時のエラーハンドリング (優先度: 最高)
 - タイムライン関連
   - 投稿の詳細(特定の1件)を見る (優先度: 中)
   - リアクションを確認する (優先度: 中)
@@ -74,8 +83,3 @@ tomlファイルに
   - 特定のユーザーの投稿をみる (優先度: 高)
 - Stream APIを利用した自動更新(watchコマンドで擬似的に可能ではある) (優先度: 低)
 - その他「できること」以外の内容
-
-## その他挙動について
-
-- `-i`でインスタンスを指定しなかった場合は、toml内の一番上のインスタンスを自動的に利用します
-- 未知の挙動があるかもしれません。サーバーを破壊することは無いと思いますが、責任は負いません。
