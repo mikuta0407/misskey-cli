@@ -19,6 +19,8 @@ func (c *Client) apiPost(jsonByte []byte, endpoint string) error {
 		return err
 	}
 
+	req.Header.Set("content-type", "application/json")
+
 	client := &http.Client{}
 	resp, err := client.Do(req)
 
