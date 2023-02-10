@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/mikuta0407/misskey-cli/misskey"
 	"github.com/spf13/cobra"
@@ -21,11 +22,11 @@ var renoteCmd = &cobra.Command{
 		client := misskey.NewClient(instanceName, cfgFile)
 
 		if len(args) > 1 {
-			fmt.Println("too many args")
+			fmt.Fprintln(os.Stderr, "too many args")
 			return
 		}
 		if len(args) == 0 {
-			fmt.Println("Please give noteID")
+			fmt.Fprintln(os.Stderr, "Please give noteID")
 			return
 		}
 		client.RenoteNote(args[0])

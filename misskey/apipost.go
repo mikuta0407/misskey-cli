@@ -30,7 +30,7 @@ func (c *Client) apiPost(jsonByte []byte, endpoint string) error {
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode > 300 {
-		fmt.Println(resp.StatusCode, c.resBuf)
+		fmt.Fprintln(os.Stderr, resp.StatusCode, c.resBuf)
 		os.Exit(1)
 	}
 	defer resp.Body.Close()

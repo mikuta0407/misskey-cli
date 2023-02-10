@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/mikuta0407/misskey-cli/misskey"
 	"github.com/spf13/cobra"
@@ -23,35 +24,35 @@ var noteCmd = &cobra.Command{
 
 		if deleteId == "" && replyId == "" {
 			if len(args) > 1 {
-				fmt.Println("too many args")
+				fmt.Fprintln(os.Stderr, "too many args")
 				return
 			}
 			if len(args) == 0 {
-				fmt.Println("Please write note")
+				fmt.Fprintln(os.Stderr, "Please write note")
 				return
 			}
 
 			if err := client.CreateNote(args[0]); err != nil {
-				fmt.Println(err)
+				fmt.Fprintln(os.Stderr, err)
 			}
 		} else if deleteId != "" && replyId == "" {
 			if err := client.DeleteNote(deleteId); err != nil {
-				fmt.Println(err)
+				fmt.Fprintln(os.Stderr, err)
 			}
 		} else if deleteId == "" && replyId != "" {
 			if len(args) > 1 {
-				fmt.Println("too many args")
+				fmt.Fprintln(os.Stderr, "too many args")
 				return
 			}
 			if len(args) == 0 {
-				fmt.Println("Please write note")
+				fmt.Fprintln(os.Stderr, "Please write note")
 				return
 			}
 			if err := client.ReplyNote(replyId, args[0]); err != nil {
-				fmt.Println(err)
+				fmt.Fprintln(os.Stderr, err)
 			}
 		} else {
-			fmt.Println("Please one Option")
+			fmt.Fprintln(os.Stderr, "Please give one Option")
 			return
 		}
 	},

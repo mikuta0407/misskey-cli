@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/buger/jsonparser"
@@ -64,7 +65,7 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 		if err != nil {
 			note, err = pickNote(value)
 			if err != nil {
-				fmt.Println(err)
+				fmt.Fprintln(os.Stderr, err)
 				return
 			}
 
@@ -73,7 +74,7 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 				replyParentValue, _, _, _ := jsonparser.Get(value, "reply")
 				replyParent, err := pickNote(replyParentValue)
 				if err != nil {
-					fmt.Println(err)
+					fmt.Fprintln(os.Stderr, err)
 					return
 				}
 				repStr := fmt.Sprintf("%s \x1b[35m%s(@%s)\x1b[0m\t %s \x1b[32m%s\x1b[0m\x1b[34m(%s)\x1b[0m", replyParent.timestamp, replyParent.name, replyParent.username, replyParent.text, replyParent.attach, replyParent.id)
@@ -87,7 +88,7 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 
 			note, err = pickNote(renoteValue)
 			if err != nil {
-				fmt.Println(err)
+				fmt.Fprintln(os.Stderr, err)
 				return
 			}
 
@@ -101,7 +102,7 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 	})
 
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return err
 	}
 

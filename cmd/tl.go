@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 
@@ -19,7 +20,7 @@ var tlCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client := misskey.NewClient(instanceName, cfgFile)
 		if err := client.GetTimeline(limit, mode); err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 		}
 	},
 }
