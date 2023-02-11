@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/mikuta0407/misskey-cli/config"
 	"github.com/spf13/cobra"
@@ -29,17 +30,18 @@ func Execute() {
 	}
 }
 
+func configFile() string {
+	dir, _ := os.UserConfigDir()
+	return filepath.Join(dir, "misskey-cli.toml")
+}
+
 func init() {
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.misskey-cli.toml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", configFile(), "config file")
 	rootCmd.PersistentFlags().StringVarP(&instanceName, "instance", "i", "", "connect instance name(not host name)")
 
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	if cfgFile == "" {
-		home, _ := os.UserHomeDir()
-		cfgFile = home + "/.config/misskey-cli.toml"
-	}
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 }
 

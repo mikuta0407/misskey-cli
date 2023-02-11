@@ -18,7 +18,7 @@ type Client struct {
 func NewClient(instanceName string, cfgFile string) *Client {
 	configs, err := config.ParseToml(cfgFile)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 
@@ -30,7 +30,7 @@ func NewClient(instanceName string, cfgFile string) *Client {
 		if isExist {
 			instanceInfo = configs.Instance[index]
 		} else {
-			fmt.Println("No instance name in config")
+			fmt.Fprintln(os.Stderr, "No instance name in config")
 			os.Exit(1)
 		}
 	} else {
@@ -38,7 +38,7 @@ func NewClient(instanceName string, cfgFile string) *Client {
 	}
 
 	if instanceInfo.Host == "" || instanceInfo.Token == "" {
-		fmt.Println("No instance specification")
+		fmt.Fprintln(os.Stderr, "No instance specification")
 		return nil
 	}
 
@@ -59,7 +59,7 @@ func include(slice []config.InstanceInfo, target string) (int, bool) {
 func printLine() {
 	width, _, err := terminal.GetSize(syscall.Stdin)
 	if err != nil {
-		fmt.Printf("Error : %+v", err)
+		fmt.Fprintf(os.Stderr, "Error : %+v", err)
 		os.Exit(1)
 	}
 
