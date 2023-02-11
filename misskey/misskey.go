@@ -4,10 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"syscall"
 
 	"github.com/mikuta0407/misskey-cli/config"
-	"golang.org/x/crypto/ssh/terminal"
 )
 
 type Client struct {
@@ -57,12 +55,7 @@ func include(slice []config.InstanceInfo, target string) (int, bool) {
 }
 
 func printLine() {
-	width, _, err := terminal.GetSize(syscall.Stdin)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error : %+v", err)
-		os.Exit(1)
-	}
-
+	width := terminalWidth()
 	for i := 1; i <= width; i++ {
 		fmt.Printf("=")
 	}
