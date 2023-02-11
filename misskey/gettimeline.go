@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	Output = colorable.NewColorableStdout()
+	output = colorable.NewColorableStdout()
 )
 
 type noteData struct {
@@ -83,7 +83,7 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 					return
 				}
 				repStr := fmt.Sprintf("%s \x1b[35m%s(@%s)\x1b[0m\t %s \x1b[32m%s\x1b[0m\x1b[34m(%s)\x1b[0m", replyParent.timestamp, replyParent.name, replyParent.username, replyParent.text, replyParent.attach, replyParent.id)
-				fmt.Fprintln(Output, repStr)
+				fmt.Fprintln(output, repStr)
 				note.offset = "    "
 			}
 
@@ -103,7 +103,7 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 
 		str := fmt.Sprintf("%s%s \x1b[31m%s(@%s)\x1b[0m\t %s \x1b[32m%s\x1b[0m\x1b[34m(%s)\x1b[0m", note.offset, note.timestamp, note.name, note.username, note.text, note.attach, note.id)
 
-		fmt.Fprintln(Output, str)
+		fmt.Fprintln(output, str)
 	})
 
 	if err != nil {
