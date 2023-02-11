@@ -12,7 +12,7 @@ import (
 )
 
 func terminalWidth() int {
-	width, _, err := terminal.GetSize(syscall.Stdin)
+	width, _, err := terminal.GetSize(syscall.Stdout)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error : %+v", err)
 		os.Exit(1)
