@@ -12,9 +12,12 @@ MisskeyのCLIクライアントです。
 
 ### 事前準備
 
-1. `~/.config/misskey-cli.toml` を作成します。
-2. misskeyのサイトで、設定→その他設定→API→アクセストークンの作成 で、APIのアクセストークンを作成します(コピーして下さい)
-3. 以下の内容にします。(token欄に2番で作成したAPIアクセストークンを入力します)
+1. `misskey-cli.toml` を作成します。以下はデフォルトの場所(オプション不要で読まれる場所)
+  - Windows: `%APPDATA%\misskey-cli.toml`
+  - Linux: `~/.config/misskey-cli.toml`
+  - macOS: `~/mikuta0407/Library/Application Support/misskey-cli.toml`
+1. misskeyのサイトで、設定→その他設定→API→アクセストークンの作成 で、APIのアクセストークンを作成します(コピーして下さい)
+2. 以下の内容にします。(token欄に2番で作成したAPIアクセストークンを入力します)
   ```
   [[Instance]]
     host = "https://example.com"
@@ -72,8 +75,7 @@ MisskeyのCLIクライアントです。
  
 ## まだできないこと
 
-- Windows(cmd/ps)での動作
-  - なけなしのデザインのために使ってるterminal.GetSizeが動かないので対応しないかもしれません。WSLなら使えます(WSL1/2)
+- ~~Windows(cmd/ps)での動作~~ ← mattnさん、yulogさんのおかげで動作するようになりました!!!
 - インスタンス設定関連
   - コマンドから新たにアカウントを追加する (優先度: 最高)
 - タイムライン関連
