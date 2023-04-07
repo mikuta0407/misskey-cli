@@ -35,12 +35,15 @@ MisskeyのCLIクライアントです。
     - `-m global`でグローバルTL
     - `-m home`でホームTL
     - `-l 20`で20件表示(デフォルト10件)
+- ストリーミング: `stream`
+  - `./misskey-cli stream -i hogeinstance local`
 - 新規投稿/リプライ/投稿の削除: `note`
   - `./misskey-cli note -i hogeinstance ねこです`: hogeinstanceインスタンスに「ねこです」と投稿
   - `./misskey-cli note -i hogeinstance -r 9012abcdef "よろしくおねがいします。 ねこでした`: ノートIDが9012abcdefの投稿に返信
   - `./misskey-cli note -i hogeinstance -d 9012abcdef`: ノートIDが9012abcdefの投稿を削除
 - リノート: `renote`
   - `./misskey-cli renote -i hogeinstance 9012abcdef`: ノートIDが9012abcdefの投稿をリノート
+
 
 ### その他挙動について
 
@@ -57,6 +60,7 @@ MisskeyのCLIクライアントです。
   - インスタンスを切り替えて操作する
     - `-i`でtoml内の`name`で指定した名前を指定します
 - タイムライン
+  - **Stream APIを用いてタイムラインをストリーミングで見る**
   - homeタイムラインを見る
   - localタイムラインを見る
   - globalタイムラインを見る
@@ -93,5 +97,4 @@ MisskeyのCLIクライアントです。
   - フォロー/アンフォローする (優先度: 中)
   - 特定のユーザーの投稿をみる (優先度: 低)
   - その他全部
-- Stream APIを利用した自動更新(watchコマンドで擬似的に可能ではある) (優先度: 低)
 - その他「できること」以外の内容

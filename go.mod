@@ -9,7 +9,13 @@ require (
 	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b
 )
 
-require github.com/mattn/go-isatty v0.0.16 // indirect
+require (
+	github.com/google/uuid v1.3.0 // indirect
+	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/mattn/go-isatty v0.0.16 // indirect
+	github.com/sacOO7/go-logger v0.0.0-20180719173527-9ac9add5a50d // indirect
+	github.com/sacOO7/gowebsocket v0.0.0-20221109081133-70ac927be105 // indirect
+)
 
 require (
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
