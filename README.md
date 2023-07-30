@@ -15,7 +15,7 @@ MisskeyのCLIクライアントです。
 1. `misskey-cli.toml` を作成します。以下はデフォルトの場所(オプション不要で読まれる場所)
   - Windows: `%APPDATA%\misskey-cli.toml`
   - Linux: `~/.config/misskey-cli.toml`
-  - macOS: `~/mikuta0407/Library/Application Support/misskey-cli.toml`
+  - macOS: `~/Library/Application Support/misskey-cli.toml`
 1. misskeyのサイトで、設定→その他設定→API→アクセストークンの作成 で、APIのアクセストークンを作成します(コピーして下さい)
 2. 以下の内容にします。(token欄に2番で作成したAPIアクセストークンを入力します)
   ```
