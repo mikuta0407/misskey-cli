@@ -10,6 +10,7 @@ import (
 
 	"github.com/buger/jsonparser"
 	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
 	"github.com/sacOO7/gowebsocket"
 )
 
@@ -45,12 +46,31 @@ func (c *Client) GetStream(mode string) error {
 	}
 
 	socket.OnDisconnected = func(err error, socket gowebsocket.Socket) {
-		log.Println("Disconnected from server ")
-		return
+		log.Println("Disconnected from server.")
+		socket.Connect()
+		initialConnect(socket, mode)
+	}
+
+	socket.OnPingReceived = func(data string, socket gowebsocket.Socket) {
+		socket.SendBinary([]byte{websocket.PongMessage})
 	}
 
 	socket.Connect()
+	initialConnect(socket, mode)
 
+	for {
+		select {
+		case <-interrupt:
+			log.Println("interrupt")
+			socket.Close()
+			return nil
+		}
+
+	}
+
+}
+
+func initialConnect(socket gowebsocket.Socket, mode string) error {
 	uu, err := uuid.NewRandom()
 	if err != nil {
 		return err
@@ -73,16 +93,7 @@ func (c *Client) GetStream(mode string) error {
 		return errors.New("Please select mode in local/home/global")
 	}
 	socket.SendText(channelText)
-
-	for {
-		select {
-		case <-interrupt:
-			log.Println("interrupt")
-			socket.Close()
-			return nil
-		}
-	}
-
+	return nil
 }
 
 func printNote(message string) {
