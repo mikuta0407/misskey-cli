@@ -87,10 +87,13 @@ func initialConnect(socket gowebsocket.Socket, mode string) error {
 
 	var channelText string
 
-	if mode == "local" || mode == "global" || mode == "home" {
+	if mode == "local" || mode == "global" || mode == "home" || mode == "social" || mode == "hybrid" {
+		if mode == "social" {
+			mode = "hybrid"
+		}
 		channelText = "{\"type\":\"connect\",\"body\":{\"channel\":\"" + mode + "Timeline\",\"id\":\"" + tlChId + "\"}}"
 	} else {
-		return errors.New("Please select mode in local/home/global")
+		return errors.New("Please select mode in local/home/global/social/hybrid")
 	}
 	socket.SendText(channelText)
 	return nil

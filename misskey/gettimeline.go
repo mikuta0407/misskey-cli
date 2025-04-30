@@ -44,8 +44,10 @@ func (c *Client) GetTimeline(limit int, mode string) error {
 		endpoint = "notes/global-timeline"
 	} else if mode == "home" {
 		endpoint = "notes/timeline"
+	} else if mode == "social" || mode == "hybrid" {
+		endpoint = "notes/hybrid-timeline"
 	} else {
-		return errors.New("Please select mode in local/home/global")
+		return errors.New("Please select mode in local/home/global/social/hybrid")
 	}
 
 	jsonByte, err := json.Marshal(body)
